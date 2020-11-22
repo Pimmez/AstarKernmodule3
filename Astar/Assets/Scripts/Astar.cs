@@ -15,27 +15,27 @@ public class Astar
 	/// <returns></returns>
 	public List<Vector2Int> FindPathToTarget(Vector2Int startPos, Vector2Int endPos, Cell[,] grid)
 	{
-		List<Node> openList = new List<Node>();
-		List<Node> closedList = new List<Node>();
+		List<Node> _openList = new List<Node>();
+		List<Node> _closedList = new List<Node>();
 
 		Node _startNode = new Node(startPos, null, 0, 0);
 		Node _currentNode = _startNode;
-		openList.Add(_startNode);
+		_openList.Add(_startNode);
 
-		while (openList.Count > 0)
+		while (_openList.Count > 0)
 		{
-			_currentNode = openList[0];
+			_currentNode = _openList[0];
 
-			for (int i = 1; i < openList.Count; i++)
+			for (int i = 1; i < _openList.Count; i++)
 			{
-				if (openList[i].FScore < _currentNode.FScore)
+				if (_openList[i].FScore < _currentNode.FScore)
 				{
-					_currentNode = openList[i];
+					_currentNode = _openList[i];
 				}
 			}
 
-			openList.Remove(_currentNode);
-			closedList.Add(_currentNode);
+			_openList.Remove(_currentNode);
+			_closedList.Add(_currentNode);
 
 			if (_currentNode.position == endPos)
 			{
@@ -46,16 +46,16 @@ public class Astar
 			{
 				Node _neighbourNode = new Node(neighbour.gridPosition, _currentNode, (int)_currentNode.GScore + 1, GetDistance(neighbour.gridPosition, endPos));
 
-				if (closedList.Any(n => n.position == neighbour.gridPosition))
+				if (_closedList.Any(n => n.position == neighbour.gridPosition))
 				{
 					continue;
 				}
 
-				if (openList.Any(n => n.position == neighbour.gridPosition && _neighbourNode.GScore > n.GScore))
+				if (_openList.Any(n => n.position == neighbour.gridPosition && _neighbourNode.GScore > n.GScore))
 				{
 					continue;
 				}
-				openList.Add(_neighbourNode);
+				_openList.Add(_neighbourNode);
 			}
 		}
 		return RetracePath(_startNode, _currentNode);
